@@ -2,7 +2,7 @@
 title: "R Markdown Presentation & Plotly Assignment"
 author: "Eamon Corr"
 date: "13 January 2018"
-output: html_document
+output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}

@@ -1,0 +1,56 @@
+---
+title: "R Markdown Presentatiom & Plotly Assignment"
+author: "Eamon Corr"
+date: "13 January 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{r, message=FALSE}
+library(plotly)
+library(dplyr)
+#Data:
+bike <- read.csv("bikeshare.csv")
+#Date is a factor and needs to be converted to a date format.
+bike$datetime <- strptime(bike$datetime, "%Y-%m-%d %H:%M:%S") 
+#Converts it to type POSIXlt and then POSIXct
+bike$datetime <- as.POSIXct(strptime(bike$datetime, "%Y-%m-%d %H:%M:%S"))
+#Create an "hour" column
+bike$hour <- sapply(bike$datetime, function(x){ format(x, "%H")})
+
+```
+
+
+```{r, include=FALSE}
+#Scatterplot of Count of Bikes Rented versus Hour for Working Days
+pl <- ggplot(filter(bike, workingday==1), aes(x=hour,y=count))
+gpl1 <- ggplotly(pl + geom_point(aes(color=temp),  position=position_jitter(w=1, h=0.3)) + scale_color_gradientn(colors=c('dark blue','blue','light blue','light green','yellow','orange','red')))
+
+```
+
+
+```{r, include=FALSE }
+#Scatterplot of Count of Bikes Rented versus Hour for Non Working Days
+pl <- ggplot(filter(bike,workingday==0),aes(x=hour,y=count)) 
+gpl2<- ggplotly(pl + geom_point(aes(color=temp),  position=position_jitter(w=1, h=0.3)) + scale_color_gradientn(colors=c('dark blue','blue','light blue','light green','yellow','orange','red')))
+
+```
+
+##
+####Count of Bikes Rented versus Hour - Working Days  
+
+```{r}
+gpl1
+```
+
+##
+####Count of Bikes Rented versus Hour -Non Working Days  
+
+```{r}
+gpl2
+```
+
